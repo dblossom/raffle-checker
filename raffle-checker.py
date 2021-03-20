@@ -20,6 +20,7 @@ class RaffleChecker:
     todays_number = ""
     numbers_dict = {}
     ticket_array = None
+    td_data = None
 
     def __init__(self,ticket_array):
         self.ticket_array = ticket_array
@@ -28,21 +29,24 @@ class RaffleChecker:
         # Let's get the date so we can strip the year for `year=` of URL.
         now = datetime.datetime.now()
         # in URL, ID=29 is the ID to the PICK 4 evening numbers
-        #url = 'https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year=2020&print=1'
         url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year={}&print=1".format(now.year)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "lxml")
-        data = soup.findAll('td')
+        self.td_data = soup.findAll('td')
 
-        n = 1
+        td_number = 1
         long_string = ""
 
-        for d in data:
-            if n == 1:
-                curdate = lxml.html.fromstring(str(d)).text_content().rstrip().lstrip()
+        for td in self.td_data:
+
+            # the first <td> </td> is the date
+            if td_number == 1:
+                curdate = lxml.html.fromstring(str(td)).text_content().rstrip().lstrip()
                 long_string = long_string + curdate
-            if n == 2:
-                test = lxml.html.fromstring(str(d)).text_content().replace("Wild Ball:", "").rstrip().lstrip().replace(' ','').strip()
+
+            # the second <td> </td> is the number & wild ball (discard it)
+            if td_number == 2:
+                test = lxml.html.fromstring(str(td)).text_content().replace("Wild Ball:", "").rstrip().lstrip().replace(' ','').strip()
                 numbers = ""
                 for i in test:
                     if i.isnumeric():
@@ -53,13 +57,17 @@ class RaffleChecker:
                     self.todays_number = numbers
                 long_string = long_string + " - " + numbers + "\n"
                 curnum = numbers
-            n = n + 1
-            if n > 3:
+
+            # the third and final <td> </td> is garbage.
+            # so, let's add number to dictionary and reset.
+            if td_number == 3:
                 self.numbers_dict.update({curnum:curdate})
-                n = 1
+                td_number = 1
                 # probably don't need to clear these, but what the heck
                 curdate = ""
                 curnum = ""
+
+            td_number = td_number + 1
 
     def check_winner(self):
         win = False;
