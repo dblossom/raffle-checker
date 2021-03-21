@@ -43,11 +43,10 @@ class RaffleChecker:
             # the second <td> </td> is the number & wild ball (discard it)
             if td_number == 2:
                 num_list = lxml.html.fromstring(str(td)).text_content().replace("Wild Ball:", "").rstrip().lstrip().replace(' ','').strip()
-                print(num_list)
                 numbers = ""
                 for num in num_list:
                     if num.isnumeric():
-                        numbers = numbers + i
+                        numbers = numbers + num
                     if len(numbers) > 3:
                         break;
                 if len(self.todays_number) == 0:
