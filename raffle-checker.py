@@ -35,27 +35,23 @@ class RaffleChecker:
         self.td_data = soup.findAll('td')
 
         td_number = 1
-        long_string = ""
-
         for td in self.td_data:
-
             # the first <td> </td> is the date
             if td_number == 1:
                 curdate = lxml.html.fromstring(str(td)).text_content().rstrip().lstrip()
-                long_string = long_string + curdate
 
             # the second <td> </td> is the number & wild ball (discard it)
             if td_number == 2:
-                test = lxml.html.fromstring(str(td)).text_content().replace("Wild Ball:", "").rstrip().lstrip().replace(' ','').strip()
+                num_list = lxml.html.fromstring(str(td)).text_content().replace("Wild Ball:", "").rstrip().lstrip().replace(' ','').strip()
+                print(num_list)
                 numbers = ""
-                for i in test:
-                    if i.isnumeric():
+                for num in num_list:
+                    if num.isnumeric():
                         numbers = numbers + i
                     if len(numbers) > 3:
                         break;
                 if len(self.todays_number) == 0:
                     self.todays_number = numbers
-                long_string = long_string + " - " + numbers + "\n"
                 curnum = numbers
 
             # the third and final <td> </td> is garbage.
@@ -66,7 +62,11 @@ class RaffleChecker:
                 # probably don't need to clear these, but what the heck
                 curdate = ""
                 curnum = ""
+                # we continue to end this iteration of the loop and this allows
+                #us to skip over incrementing td_number pre-maturely
+                continue
 
+            # increment for the next pass
             td_number = td_number + 1
 
     def check_winner(self):
@@ -84,7 +84,7 @@ class RaffleChecker:
                 anotherwin = "Looks like you also won on " + date + " with " + num + "\n" + anotherwin
         email_string = ""
         email_string = "Today's number is: " + self.todays_number + "\n"
-        email_string = email_string + "As a reminder your numbers are: " + str(self.ticket_array).strip('[]') +"\n"
+        email_string = email_string + "As a reminder your numbers are: " + str(self.ticket_array).strip('[]').replace('\'','') +"\n"
         if win:
             email_string = email_string + "Which matches todays number, Congrats!" + "\n"
 
