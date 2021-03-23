@@ -7,6 +7,10 @@ import lxml.html
 from bs4 import BeautifulSoup
 import datetime
 import random
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
 
 # Link to the Google Spreadsheet for the 2020-2021 Raffle.
 # Note, it's one large link broken up to be more "readable"
@@ -91,7 +95,8 @@ class RaffleChecker:
             anotherwin = "You have not won anything yet!"
         email_string = email_string + anotherwin
 
-        print(email_string)
+        #print(email_string)
+        return email_string
 
 if __name__ == '__main__':
     my_numbers = ["1884","1930","2487","2816"]
