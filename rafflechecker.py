@@ -25,6 +25,7 @@ class RaffleChecker:
     numbers_dict = {}
     ticket_array = None
     td_data = None
+    anotherwin_array = []
 
     def __init__(self,ticket_array):
         self.ticket_array = ticket_array
@@ -74,29 +75,27 @@ class RaffleChecker:
 
     def check_winner(self):
         win = False;
-        anotherwin = ""
         for num in self.ticket_array:
             # if the incoming data doesn't contain a leading 0, the check will fail.
             if len(num) < 4:
                 num = "0"+num
             if self.todays_number == num:
                 win = True;
-                #break;
             if num in self.numbers_dict:
                 date = self.numbers_dict[num]
-                anotherwin = "Looks like you also won on " + date + " with " + num + "\n" + anotherwin
-        email_string = ""
-        email_string = "Today's number is: " + self.todays_number + "\n"
-        email_string = email_string + "As a reminder your numbers are: " + str(self.ticket_array).strip('[]').replace('\'','') +"\n"
-        if win:
-            email_string = email_string + "Which matches todays number, Congrats!" + "\n"
+                self.anotherwin_array.append("Looks like you won on " + date + " with " + num)
 
-        if anotherwin == "":
-            anotherwin = "You have not won anything yet!"
-        email_string = email_string + anotherwin
+    def today_number(self):
+        if len(self.todays_number) == 0:
+            return "Error: todays number not set!"
+        else:
+            return self.todays_number
 
-        #print(email_string)
-        return email_string
+    def any_win(self):
+        print(len(self.anotherwin_array))
+        if len(self.anotherwin_array) == 0:
+            self.anotherwin_array.append("You have not won anything yet!")
+        return self.anotherwin_array
 
 if __name__ == '__main__':
     my_numbers = ["1884","1930","2487","2816"]

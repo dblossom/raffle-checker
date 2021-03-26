@@ -33,7 +33,9 @@ def raffleresult(mylist):
     splitlist = mylist.split(",")
     rc = RaffleChecker(splitlist)
     rc.collect_winning_numbers()
-    win = rc.check_winner()
-    return render_template("raffleresults.html",win=win)
+    rc.check_winner()
+    todays_number = rc.today_number()
+    any_win = rc.any_win()
+    return render_template("raffleresults.html",mylist=splitlist,todays_number=todays_number,any_win=any_win)
 if __name__ == "main__":
     app.run(debug=True)

@@ -2,9 +2,9 @@
 {% block title %}danielblossom.com{% endblock %}
 {% block content%}
 <h1>Here is your result!</h1>
-<p>{{mylist}}</p>
-{% for item in mylist %}
+<p>Today's Winning Number is: {{todays_number}}</p>
+<p>Your numbers are: {{mylist}}</p>
+{% for item in any_win %}
 <p>{{item}}</p>
 {% endfor %}
-<P>{{win}}</p>
 {% endblock %}
