@@ -97,16 +97,8 @@ class RaffleChecker:
             self.anotherwin_array.append("You have not won anything yet!")
         return self.anotherwin_array
 
-if __name__ == '__main__':
-    my_numbers = ["1884","1930","2487","2816"]
-    rc = RaffleChecker(my_numbers)
-    rc.collect_winning_numbers()
-    rc.check_winner()
-
-
-# hacky test ....
-#index = 1
-#while index < 5000:
-#    index = index + 1
-#    ran = random.randint(0,9999)
-#    my_numbers.append(str(ran))
+#if __name__ == '__main__':
+#    my_numbers = ["1884","1930","2487","2816"]
+#    rc = RaffleChecker(my_numbers)
+#    rc.collect_winning_numbers()
+#    rc.check_winner()
