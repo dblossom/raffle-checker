@@ -22,6 +22,7 @@ class RaffleChecker:
     ticket_array = None
     td_data = None
     anotherwin_array = []
+    start_date = datetime.datetime(2020,7,1)
 
     def __init__(self,ticket_array):
         self.ticket_array = ticket_array
@@ -30,7 +31,7 @@ class RaffleChecker:
         # Let's get the date so we can strip the year for `year=` of URL.
         now = datetime.datetime.now()
         # in URL, ID=29 is the ID to the PICK 4 evening numbers
-        url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year={}&print=1".format(now.year)
+        url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year=2020&print=1".format(now.year)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "lxml")
         self.td_data = soup.findAll('td')
@@ -40,6 +41,7 @@ class RaffleChecker:
             # the first <td> </td> is the date
             if td_number == 1:
                 curdate = lxml.html.fromstring(str(td)).text_content().rstrip().lstrip()
+                curdate = datetime.datetime.strptime(curdate,"%m/%d/%Y")
 
             # the second <td> </td> is the number & wild ball (discard it)
             if td_number == 2:
@@ -57,6 +59,10 @@ class RaffleChecker:
             # the third and final <td> </td> is garbage.
             # so, let's add number to dictionary and reset.
             if td_number == 3:
+                # raffle runs across two years 7/1/2020 - 6/30/2012,
+                #so want to strip first half of year, those results don't apply.
+                if curdate < self.start_date:
+                    continue
                 self.numbers_dict.update({curnum:curdate})
                 td_number = 1
                 # probably don't need to clear these, but what the heck
@@ -79,7 +85,7 @@ class RaffleChecker:
                 win = True;
             if num in self.numbers_dict:
                 date = self.numbers_dict[num]
-                self.anotherwin_array.append("Looks like you won on " + date + " with " + num)
+                self.anotherwin_array.append("Looks like you won on " + date.strftime("%m/%d/%Y") + " with " + num)
 
     def today_number(self):
         if len(self.todays_number) == 0:
@@ -95,7 +101,7 @@ class RaffleChecker:
 
     def validate_input(self,input):
         if len(input) == 0:
-            return False 
+            return False
         for item in input:
             if not(item.isnumeric()) or len(item) > 4:
                 return False
