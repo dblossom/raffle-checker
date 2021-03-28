@@ -1,9 +1,24 @@
 {% extends "base.html" %}
 {% block title %}danielblossom.com{% endblock %}
-{% block content%}
-<h1>Let's check your raffle ticket(s)!</h1>
+{% block container%}
+<div class="row">
+  <div class="col-lg-auto">
+    <h1>Let's check your raffle ticket(s)!</h1>
+  </div>
+</div>
 <form action="#" method="post">
-<p><input type="text" name="tickets"></p>
-<p><input type="submit" name="submit"></p>
+  <div class="row">
+    <div class="col-lg-auto">
+      <div class="mb-3">
+        <label for="ticket_input" class="form-label">
+        Enter tickets spearated by comma ie: 1234,5678,9999
+        </label>
+        <textarea class="form-control" id="ticket_input" name="tickets" rows="3"></textarea>
+      </div>
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary" type="submit" name="submit">Submit</button>
+      </div>
+    </div>
+  </div>
 </form>
 {% endblock %}

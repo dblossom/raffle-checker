@@ -7,10 +7,6 @@ import lxml.html
 from bs4 import BeautifulSoup
 import datetime
 import random
-from flask import Flask
-app = Flask(__name__)
-
-@app.route('/')
 
 # Link to the Google Spreadsheet for the 2020-2021 Raffle.
 # Note, it's one large link broken up to be more "readable"
@@ -96,6 +92,14 @@ class RaffleChecker:
         if len(self.anotherwin_array) == 0:
             self.anotherwin_array.append("You have not won anything yet!")
         return self.anotherwin_array
+
+    def validate_input(self,input):
+        if len(input) == 0:
+            return False 
+        for item in input:
+            if not(item.isnumeric()) or len(item) > 4:
+                return False
+        return True
 
 #if __name__ == '__main__':
 #    my_numbers = ["1884","1930","2487","2816"]
