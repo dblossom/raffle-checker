@@ -1,10 +1,27 @@
 {% extends "base.html" %}
 {% block title %}danielblossom.com{% endblock %}
-{% block content%}
-<h1>Here is your result!</h1>
-<p>Today's Winning Number is: {{todays_number}}</p>
-<p>Your numbers are: {{mylist}}</p>
-{% for item in any_win %}
-<p>{{item}}</p>
-{% endfor %}
+{% block container%}
+<div class="row">
+  <div class="col-lg-auto">
+    <h1>Here is your result!</h1>
+  </div>
+</div>
+<div class="row align-items-center">
+  <div class="col-lg-auto"> Today's Winning Number is: </div>
+  <div class="col-lg-auto"> {{todays_number}} </div>
+</div>
+<div class="row align-items-center">
+  <div class="col-lg-auto"> Your numbers are: </div>
+  <div class="col-lg-auto"> {{mylist}} </div>
+</div>
+<div class="row align-items-center">
+  {% for item in any_win %}
+  <div class="col-lg-auto"> {{item}} </div>
+  {% endfor %}
+</div>
+<div class="row">
+  <div class="col-lg-auto">
+    <a class="btn btn-primary" href="/rafflechecker" role="button">Back</a>
+  </div>
+</div>
 {% endblock %}

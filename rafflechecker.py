@@ -20,7 +20,6 @@ class RaffleChecker:
     todays_number = ""
     numbers_dict = {}
     ticket_array = None
-    td_data = None
     anotherwin_array = []
     start_date = datetime.datetime(2020,7,1)
 
@@ -31,13 +30,19 @@ class RaffleChecker:
         # Let's get the date so we can strip the year for `year=` of URL.
         now = datetime.datetime.now()
         # in URL, ID=29 is the ID to the PICK 4 evening numbers
-        url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year=2020&print=1".format(now.year)
+        url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year={}&print=1".format(now.year)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "lxml")
-        self.td_data = soup.findAll('td')
+        td_data = soup.findAll('td')
+
+        if (now.year > self.start_date.year):
+            url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year={}&print=1".format(self.start_date.year)
+            response = requests.get(url)
+            soup = BeautifulSoup(response.text, "lxml")
+            td_data = td_data + soup.findAll('td')
 
         td_number = 1
-        for td in self.td_data:
+        for td in td_data:
             # the first <td> </td> is the date
             if td_number == 1:
                 curdate = lxml.html.fromstring(str(td)).text_content().rstrip().lstrip()
@@ -94,7 +99,6 @@ class RaffleChecker:
             return self.todays_number
 
     def any_win(self):
-        print(len(self.anotherwin_array))
         if len(self.anotherwin_array) == 0:
             self.anotherwin_array.append("You have not won anything yet!")
         return self.anotherwin_array
@@ -106,6 +110,10 @@ class RaffleChecker:
             if not(item.isnumeric()) or len(item) > 4:
                 return False
         return True
+
+    def reset(self):
+        self.anotherwin_array.clear()
+        self.numbers_dict.clear()
 
 #if __name__ == '__main__':
 #    my_numbers = ["1884","1930","2487","2816"]

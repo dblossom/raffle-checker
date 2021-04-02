@@ -31,6 +31,8 @@ def raffleresult(mylist):
     rc.check_winner()
     todays_number = rc.today_number()
     any_win = rc.any_win()
+    #rc.reset()
+    #print(any_win)
     return render_template("raffleresults.html",mylist=splitlist,todays_number=todays_number,any_win=any_win)
 
 @app.route("/inputerror<mylist>")
