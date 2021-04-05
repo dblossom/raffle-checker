@@ -12,13 +12,22 @@
 </div>
 <div class="row align-items-center">
   <div class="col-lg-auto"> Your numbers are: </div>
-  <div class="col-lg-auto"> {{mylist}} </div>
-</div>
-<div class="row align-items-center">
-  {% for item in any_win %}
-  <div class="col-lg-auto"> {{item}} </div>
+  {% for number in mylist %}
+  <div class="col-lg-auto"> {{number}} </div>
   {% endfor %}
 </div>
+{% if any_win %}
+  {% for key in any_win %}
+  <div class="row align-items-center">
+    <div class="col-lg-auto"> {{key.month}}/{{key.day}}/{{key.year}} </div>
+    <div class="col-lg-auto"> with: {{any_win[key]}} </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="row align-items-center">
+    <div class="col-lg-auto"> You haven't won anything, sorry. </div>
+  </div>
+{% endif %}
 <div class="row">
   <div class="col-lg-auto">
     <a class="btn btn-primary" href="/rafflechecker" role="button">Back</a>

@@ -22,7 +22,8 @@ def rafflechecker():
 
 @app.route("/raffleresults<mylist>")
 def raffleresult(mylist):
-    splitlist = mylist.split(",")
+    print(mylist)
+    splitlist = [num.strip() for num in mylist.split(",")]
     rc = RaffleChecker(splitlist)
     valid = rc.validate_input(splitlist)
     if not(valid):
@@ -32,7 +33,6 @@ def raffleresult(mylist):
     todays_number = rc.today_number()
     any_win = rc.any_win()
     #rc.reset()
-    #print(any_win)
     return render_template("raffleresults.html",mylist=splitlist,todays_number=todays_number,any_win=any_win)
 
 @app.route("/inputerror<mylist>")
@@ -40,4 +40,4 @@ def input_error(mylist):
     return render_template("inputerror.html",mylist=mylist)
 
 if __name__ == "main__":
-    app.run(debug=True)
+    app.run()

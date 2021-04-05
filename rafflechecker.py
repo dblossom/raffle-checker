@@ -20,7 +20,7 @@ class RaffleChecker:
     todays_number = ""
     numbers_dict = {}
     ticket_array = None
-    anotherwin_array = []
+    anotherwin_dict = {}
     start_date = datetime.datetime(2020,7,1)
 
     def __init__(self,ticket_array):
@@ -68,7 +68,10 @@ class RaffleChecker:
                 #so want to strip first half of year, those results don't apply.
                 if curdate < self.start_date:
                     continue
-                self.numbers_dict.update({curnum:curdate})
+                # check fails w/o leading zero due to being a string not int
+                if len(curnum) < 4:
+                    curnum = "0"+curnum
+                self.numbers_dict.update({curdate:curnum})
                 td_number = 1
                 # probably don't need to clear these, but what the heck
                 curdate = ""
@@ -81,16 +84,13 @@ class RaffleChecker:
             td_number = td_number + 1
 
     def check_winner(self):
-        win = False;
-        for num in self.ticket_array:
-            # if the incoming data doesn't contain a leading 0, the check will fail.
-            if len(num) < 4:
-                num = "0"+num
-            if self.todays_number == num:
-                win = True;
-            if num in self.numbers_dict:
-                date = self.numbers_dict[num]
-                self.anotherwin_array.append("Looks like you won on " + date.strftime("%m/%d/%Y") + " with " + num)
+        win = False
+        for key, value in self.numbers_dict.items():
+            for num in self.ticket_array:
+                if num == value:
+                    self.anotherwin_dict.update({key:value})
+                if self.today_number == num:
+                    win = True;
 
     def today_number(self):
         if len(self.todays_number) == 0:
@@ -99,9 +99,7 @@ class RaffleChecker:
             return self.todays_number
 
     def any_win(self):
-        if len(self.anotherwin_array) == 0:
-            self.anotherwin_array.append("You have not won anything yet!")
-        return self.anotherwin_array
+        return self.anotherwin_dict
 
     def validate_input(self,input):
         if len(input) == 0:
@@ -115,7 +113,8 @@ class RaffleChecker:
         self.anotherwin_array.clear()
         self.numbers_dict.clear()
 
-#if __name__ == '__main__':
+#if __name__ == '__rafflechecker.py__':
+#    reset()
 #    my_numbers = ["1884","1930","2487","2816"]
 #    rc = RaffleChecker(my_numbers)
 #    rc.collect_winning_numbers()
