@@ -35,6 +35,7 @@ class RaffleChecker:
         soup = BeautifulSoup(response.text, "lxml")
         td_data = soup.findAll('td')
 
+        # The raffle runs across a year, and our data is based on an entire year
         if (now.year > self.start_date.year):
             url = "https://www.palottery.state.pa.us/Games/Print-Past-Winning-Numbers.aspx?id=29&year={}&print=1".format(self.start_date.year)
             response = requests.get(url)
@@ -57,6 +58,7 @@ class RaffleChecker:
                         numbers = numbers + num
                     if len(numbers) > 3:
                         break;
+                # the first one in result is today's number
                 if len(self.todays_number) == 0:
                     self.todays_number = numbers
                 curnum = numbers
@@ -112,10 +114,3 @@ class RaffleChecker:
     def reset(self):
         self.anotherwin_array.clear()
         self.numbers_dict.clear()
-
-#if __name__ == '__rafflechecker.py__':
-#    reset()
-#    my_numbers = ["1884","1930","2487","2816"]
-#    rc = RaffleChecker(my_numbers)
-#    rc.collect_winning_numbers()
-#    rc.check_winner()

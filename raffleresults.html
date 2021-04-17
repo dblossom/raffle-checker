@@ -12,15 +12,18 @@
 </div>
 <div class="row align-items-center">
   <div class="col-lg-auto"> Your numbers are: </div>
-  {% for number in mylist %}
+    {% for number in mylist %}
   <div class="col-lg-auto"> {{number}} </div>
   {% endfor %}
 </div>
 {% if any_win %}
+  <div class="row align-items-center">
+    <div class="col-lg-auto"> You also won on the following dates: </div>
+  </div>
   {% for key in any_win %}
   <div class="row align-items-center">
     <div class="col-lg-auto"> {{key.month}}/{{key.day}}/{{key.year}} </div>
-    <div class="col-lg-auto"> with: {{any_win[key]}} </div>
+    <div class="col-lg-auto">  with: {{any_win[key]}} </div>
   </div>
   {% endfor %}
 {% else %}
