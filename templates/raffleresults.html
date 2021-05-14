@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}RaffleChecker: Results{% endblock %}
+{% block container%}
+<div class="row">
+  <div class="col-lg-auto">
+    <h1>Here is your result!</h1>
+  </div>
+</div>
+<div class="row align-items-center">
+  <div class="col-lg-auto"> Today's Winning Number is: </div>
+  <div class="col-lg-auto"> {{todays_number}} </div>
+</div>
+<div class="row align-items-center">
+  <div class="col-lg-auto"> Your numbers are: </div>
+    {% for number in mylist %}
+  <div class="col-lg-auto"> {{number}} </div>
+  {% endfor %}
+</div>
+{% if any_win %}
+  <div class="row align-items-center">
+    <div class="col-lg-auto"> You also won on the following dates: </div>
+  </div>
+  {% for key in any_win %}
+  <div class="row align-items-center">
+    <div class="col-lg-auto"> {{key.month}}/{{key.day}}/{{key.year}} </div>
+    <div class="col-lg-auto">  with: {{any_win[key]}} </div>
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="row align-items-center">
+    <div class="col-lg-auto"> You haven't won anything, sorry. </div>
+  </div>
+{% endif %}
+<div class="row">
+  <div class="col-lg-auto">
+    <a class="btn btn-primary" href="/" role="button">Back</a>
+  </div>
+</div>
+{% endblock %}
