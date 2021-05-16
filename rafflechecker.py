@@ -15,13 +15,10 @@ class RaffleChecker:
         self.todays_number = collector.today_number()
 
     def check_winner(self):
-        win = False
         for key, value in self.winning_numbers.items():
             for num in self.ticket_array:
                 if num == value:
                     self.anotherwin_dict.update({key:value})
-                #if self.today_number() == num:
-                #    win = True;
 
     def any_win(self):
         return self.anotherwin_dict
