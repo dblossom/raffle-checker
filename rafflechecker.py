@@ -7,6 +7,7 @@ import lxml.html
 from bs4 import BeautifulSoup
 import datetime
 import random
+from database import Database
 
 # Link to the Google Spreadsheet for the 2020-2021 Raffle.
 # Note, it's one large link broken up to be more "readable"
@@ -25,6 +26,8 @@ class RaffleChecker:
 
     def __init__(self,ticket_array):
         self.ticket_array = ticket_array
+        self.collect_winning_numbers();
+        self.today_number();
 
     def collect_winning_numbers(self):
         # Let's get the date so we can strip the year for `year=` of URL.
@@ -111,6 +114,19 @@ class RaffleChecker:
                 return False
         return True
 
+    def check_db_tickets(self):
+        db = Database()
+        ticket_list = db.get_all_tickets()
+        for tup in ticket_list:
+            print(tup)
+
+
     def reset(self):
         self.anotherwin_array.clear()
         self.numbers_dict.clear()
+
+if __name__ == "__main__":
+    tickets = ["1234","5678"]
+    rc = RaffleChecker(tickets)
+    rc.check_db_tickets()
+    #app.run(debug=True)

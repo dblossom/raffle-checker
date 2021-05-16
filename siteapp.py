@@ -2,15 +2,15 @@ from rafflechecker import RaffleChecker
 from database import Database
 from flask import Flask, render_template, redirect, url_for, request
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__, template_folder='templates')
 
 # default route, might change this at deployment
-@app.route('/')
-def index():
-    return render_template("index.html")
+#@app.route('/')
+#def index():
+#    return render_template("rafflechecker.html")
 
 # route to page that takes an array of tickets from a form
-@app.route("/rafflechecker", methods=["POST","GET"])
+@app.route("/", methods=["POST","GET"])
 def rafflechecker():
     if request.method == "POST":
         mylist = request.form.get("tickets")
@@ -20,8 +20,6 @@ def rafflechecker():
             rc = validate_list(ticketlist)
             if rc == -1:
                 return render_template("inputerror.html",mylist=mylist)
-            # again, more things that should be isolated to rafflechecker
-            rc.collect_winning_numbers()
             rc.check_winner()
             todays_number = rc.today_number()
             other_win = rc.any_win()
@@ -72,5 +70,5 @@ def validate_list(ticketlist):
     # return the valid RaffleChecker object
     return rc
 
-if __name__ == "main__":
+if __name__ == "__main__":
     app.run(debug=True)
