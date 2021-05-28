@@ -37,6 +37,10 @@ class Database():
 
     select_ticket = """SELECT ticket_number FROM ticket WHERE ticket_number=?"""
 
+    select_all_tickets = """SELECT * FROM ticket"""
+
+    select_pid_email = """SELECT email FROM person WHERE pid=?"""
+
     def __init__(self):
         self.con = sqlite3.connect(self.db_location + self.db_name)
         self.cur = self.con.cursor()
@@ -68,3 +72,9 @@ class Database():
             return self.cur.execute(self.select_person,(email,)).fetchone()[0]
         else:
             return -1
+
+    def get_all_tickets(self):
+        return self.cur.execute(self.select_all_tickets).fetchall()
+
+    def get_email_pid(self,pid):
+        return self.cur.execute(self.select_pid_email,(pid,)).fetchone()[0]

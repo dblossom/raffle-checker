@@ -67,6 +67,7 @@ class RaffleCollector:
                 if curdate < self.start_date:
                     continue
                 # check fails w/o leading zero due to being a string not int
+                # TODO: possible bug -- need to append 0's until len = 4
                 if len(curnum) < 4:
                     curnum = "0"+curnum
                 self.numbers_dict.update({curdate:curnum})
