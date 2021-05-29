@@ -59,7 +59,7 @@ class Emailer:
         """
         heartbeat = MIMEText(text,"plain")
         self.message.attach(heartbeat)
-        self.sendmail()
+        self.send_email()
 
 if __name__ == "__main__":
     e = Emailer()
