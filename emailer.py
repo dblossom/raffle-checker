@@ -5,6 +5,8 @@ import os
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import schedule
+import time
 
 
 class Emailer:
@@ -17,6 +19,7 @@ class Emailer:
     message = MIMEMultipart("alternative")
 
     def __init__(self):
+        self.send_alive_email()
         self.check_db_tickets()
 
     def check_db_tickets(self):
@@ -47,5 +50,20 @@ class Emailer:
             server.login(self.email_id, self.email_pass)
             server.sendmail(self.email_id, self.message["To"], self.message.as_string())
 
+    def send_alive_email(self):
+        self.message["From"] = self.email_id
+        self.message["To"] = self.db.get_email_pid(1)
+        self.message["Subject"] = "Daily heartbeat email!"
+        text = """\
+        This is your daily heartbeat email!
+        """
+        heartbeat = MIMEText(text,"plain")
+        self.message.attach(heartbeat)
+        self.sendmail()
+
 if __name__ == "__main__":
     e = Emailer()
+    schedule.every().day.at("22:00").do(e.__init__)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
