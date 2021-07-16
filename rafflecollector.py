@@ -14,7 +14,7 @@ import datetime
 
 class RaffleCollector:
 
-    start_date = datetime.datetime(2020,7,1)
+    start_date = datetime.datetime(2021,7,1)
     numbers_dict = {}
     todays_number = ""
 
